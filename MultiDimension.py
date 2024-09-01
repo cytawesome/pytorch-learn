@@ -34,8 +34,9 @@ class NeuralNetwork(torch.nn.Module):
 def train(total_epcho):
     xy = np.loadtxt('./dataset/diabetes.csv.gz', delimiter=',', dtype=np.float32)
 
-    device = torch.device('mps') #不知为啥，gpu速度远低于cpu速度，可能模型太简单了
-    #device = torch.device('cpu')
+    device = torch.device('cpu')
+    #device = torch.device('mps') #不知为啥，gpu速度远低于cpu速度，可能模型太简单了
+    #device = torch.device('cuda')
 
     x_data = torch.from_numpy(xy[:, :-1]).to(device)
     y_data = torch.from_numpy(xy[:, -1:]).to(device) #非in-place操作
