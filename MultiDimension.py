@@ -44,7 +44,7 @@ def train(total_epcho):
     model = NeuralNetwork()
     model.to(device) #in-place操作
     criterion = torch.nn.BCELoss(size_average=True) #二元交叉熵
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
     draw_y = np.zeros(total_epcho)
 
