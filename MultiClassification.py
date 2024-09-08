@@ -1,9 +1,7 @@
 import torch
-from torch.utils.data.dataset import T_co
 from torchvision import datasets,transforms
 from torch.utils.data import DataLoader, Dataset
 import torch.nn.functional as F
-import numpy as np
 import pandas as pd
 
 class NeuralNetwork(torch.nn.Module): #输入tensor的shape是(N*1*28*28)，
@@ -194,8 +192,8 @@ def train_exercise9_2(epoch_size, device):
         for batch_id, (inputs, labels) in enumerate(train_loader):
             inputs, labels = inputs.to(device), labels.to(device)  # 让数据加载到相应的cpu或gpu内存上
             labels = labels.view(inputs.size(0)) #criterion接受的labels是要求一维的
+            labels = labels.to(torch.int64) #nvidia需要labels为int，不是float，否则会报错
             y_pred = model(inputs)
-            #print(y_pred.shape, labels.shape)
             loss = criterion(y_pred, labels)
 
             accumulated_loss += loss.item()
@@ -216,6 +214,7 @@ def train_exercise9_2(epoch_size, device):
             for (inputs, labels) in test_loader:
                 inputs, labels = inputs.to(device), labels.to(device)
                 labels = labels.view(inputs.size(0))
+                labels = labels.to(torch.int64) #nvidia需要labels为int，不是float，否则会报错
                 y_pred = model(inputs)
                 _, predicted = torch.max(y_pred, 1)  # 沿着第一个纬度（行）取max，_是最大值，predicted是下标
                 correct += (predicted == labels).sum().item()
